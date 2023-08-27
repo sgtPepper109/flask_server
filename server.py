@@ -138,4 +138,4 @@ if __name__ == "__main__":
     for filename in os.listdir(assets_location):
         file_path = os.path.join(assets_location, filename)
         os.remove(file_path)
-    app.run()
+    app.run(debug=False, host='0.0.0.0')
