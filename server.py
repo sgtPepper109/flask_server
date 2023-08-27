@@ -135,6 +135,11 @@ def getSubtitles():
     return send_file(subtitles_file_location_to_send)
 
 
+@app.route('/')
+def test():
+    return 'Works'
+
+
 if __name__ == "__main__":
     for filename in os.listdir(assets_location):
         file_path = os.path.join(assets_location, filename)
