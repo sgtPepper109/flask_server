@@ -94,11 +94,17 @@ def uploadVtt():
     return make_response('Subtitles saved successfully')
 
 
+# Get information (features) of all videos
 @app.route('/getVideoStats')
 def getVideoStats():
     global video_store
+
+    # response object (array)
     video_info_array = list()
+
+    # for all the videos in the video store
     for i in video_store:
+        # to add this to the array of responses
         video_info = {
             'filename': video_store[i]['file_name'],
             'file_extension': video_store[i]['file_extension'],
@@ -107,41 +113,62 @@ def getVideoStats():
             'subtitles_file': video_store[i]['subtitle_location'],
         }
         video_info_array.append(video_info)
+    
+    # send response
     return make_response(video_info_array)
 
 
-@app.route('/getSampleVideo')
-def getSampleVideo():
-    return send_file('./Assets/video1.mp4', download_name='video1.mp4', mimetype="video/mp4")
-
-
+# get the video to render on the client page
+# request parameter: id
 @app.route('/getVideo')
 def getVideo():
     global video_store
+
+    # parse request parameters
     args = request.args.to_dict()
+    # get id from request parameters
     id = int(args['id'])
+
+    # get video file location/path (saved in assets) (This is stored in 'video_store' variable)
     file_location_to_send = video_store[id]['location']
+    # similarly get file_name
     file_name = video_store[id]['file_name']
+    # similarly get file_extension
     file_extension = video_store[id]['file_extension']
+    
+    # return video file with the help of 'send_file' method in flask
     return send_file(file_location_to_send, download_name=file_name, mimetype="video/" + file_extension)
 
 
+# get subtitles file to show in client page
+# request parameter: id
 @app.route('/getSubtitles')
 def getSubtitles():
     global video_store
+
+    # parse request parameter
     args = request.args.to_dict()
+    # get id from request parameters
     id = int(args['id'])
+
+    # get subtitles file location/path (saved in assets) (This is stored in 'video_store' variable)
     subtitles_file_location_to_send = video_store[id]['subtitle_location']
+    # return subtitles file with the help of 'send_file' method in flask
     return send_file(subtitles_file_location_to_send)
 
 
+# Just a test (Home) route
 @app.route('/')
 def test():
-    return 'Works'
+    return 'TOUCHCORE ASSESSMENT FLASK SERVER. Name: Abdulrahim Shaikh'
 
 
 if __name__ == "__main__":
+    # When server is started/restarted, clear the database (Assets folder)
     for filename in os.listdir(assets_location):
         file_path = os.path.join(assets_location, filename)
         os.remove(file_path)
+    
+    # Run server (public)
     app.run(debug=False, host='0.0.0.0')
+    # app.run()
