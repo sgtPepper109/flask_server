@@ -134,6 +134,7 @@ def getSubtitles():
     subtitles_file_location_to_send = video_store[id]['subtitle_location']
     return send_file(subtitles_file_location_to_send)
 
+
 if __name__ == "__main__":
     for filename in os.listdir(assets_location):
         file_path = os.path.join(assets_location, filename)
